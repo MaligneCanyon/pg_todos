@@ -1,0 +1,24 @@
+<ul id="lists">
+  <!-- display a list of lists (Todo objs) -->
+  <!-- < @lists.each_with_index do |list, list_ndx| %> -->
+  <!-- % sort_lists(@lists) do |list, list_ndx| %> -->
+  <% sort_lists(@lists) do |list| %>
+    <li class="<%= list_class(list) %>">
+      <!-- <a href="/lists/%= list_ndx %>"> -->
+      <!-- use a unique list id -->
+      <a href="/lists/<%= list[:id] %>">
+        <h2><%= list[:name] %></a></h2>
+        <!-- <p>%= list[:todos].size %></p> -->
+        <!-- <p>%= todos_remaining(list) %> / %= todos_count(list) %></p> -->
+        <p><%= todo_counts(list) %></p>
+      </a>
+    </li>
+  <% end %>
+</ul>
+
+<!-- display a link to create a new list (Todo obj) -->
+<!-- class="add" allows display of a spinning '+' icon -->
+<% content_for :header_links do %>
+  <!-- <a href="/lists/new">New List</a> -->
+  <a class="add" href="/lists/new">New List</a>
+<% end %>

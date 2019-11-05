@@ -1,0 +1,101 @@
+<!-- display a Todo obj -->
+<!-- <section id="todos"> -->
+<!--
+% if all_complete?(@list[:todos]) %>
+  <section id="todos" class="complete">
+% else %>
+  <section id="todos">
+% end %>
+-->
+<section id="todos" class="<%= list_class(@list) %>">
+
+  <header>
+    <h2><%= @list[:name] %></h2>
+    <ul>
+      <% if todos_count(@list) > 0 %>
+        <li>
+          <!-- <form action="/lists/%= @list_ndx %>/complete_all" method="post"> -->
+          <!-- use a unique list id -->
+          <form action="/lists/<%= @list_id %>/complete_all" method="post">
+            <!-- class="check" allows display of a check box icon -->
+            <button class="check" type="submit">Complete All</button>
+          </form>
+        </li>
+      <% end %>
+      <li>
+        <!-- class="edit" allows display of a pen icon -->
+        <!-- <a class="edit" href="/lists/%= params[:list_ndx] %>/edit">Edit List</a> -->
+        <!-- <a class="edit" href="/lists/%= @list_ndx %>/edit">Edit List</a> -->
+        <!-- use a unique list id -->
+        <a class="edit" href="/lists/<%= @list_id %>/edit">Edit List</a>
+      </li>
+    </ul>
+  </header>
+
+  <!-- display the list of todo items -->
+  <ul>
+    <!-- % @list[:todos].each_with_index do |todo, todo_ndx| %> -->
+    <!-- % sort_todos(@list[:todos]) do |todo, todo_ndx| %> -->
+    <% sort_todos(@list[:todos]) do |todo| %> <!-- we don't need todo_ndx if we use a unique id -->
+      <!-- <li> -->
+      <% if todo[:complete] %>
+        <li class="complete">
+      <% else %>
+        <li>
+      <% end %>
+        <h3><%= todo[:name] %></h3>
+        <!-- %= todo[:complete] %> *** for debug *** -->
+        <!-- <form action="/lists/%= @list_ndx %>/todos/%= todo_ndx %>" -->
+        <!-- use unique list and todo ids -->
+        <form action="/lists/<%= @list_id %>/todos/<%= todo[:id] %>"
+          method="post" class="check">
+          <input type="hidden" name="complete" value="<%= !todo[:complete] %>" />
+          <button type="submit">Complete</button>
+        </form>
+
+        <!-- display a button to allow todo deletion -->
+        <!-- class="delete" allows display of a trash-can icon -->
+        <!-- <form action="/lists/%= @list_ndx %>/todos/%= todo_ndx %>/delete" -->
+        <!-- use unique list and todo ids -->
+        <form action="/lists/<%= @list_id %>/todos/<%= todo[:id] %>/delete"
+          method="post" class="delete">
+          <button type="submit">Delete</button>
+        </form>
+      </li>
+    <% end %>
+  </ul>
+</section>
+
+<!-- create a todo item -->
+<!--
+use an explicit instance var instead of params[:list_ndx] in the following:
+<form action="/lists/%= params[:list_ndx] %>/todos" method="post">
+must define @list_ndx in routes throughout todo.rb that use this template
+
+use the following format to printout values for debug:
+<h3>@list_ndx == %= @list_ndx %>, params[:list_ndx] == %= params[:list_ndx] %></h3>
+-->
+
+<!-- <form action="/lists/%= @list_ndx %>/todos" method="post"> -->
+<!-- use a unique list id -->
+<form action="/lists/<%= @list_id %>/todos" method="post">
+  <dl>
+    <dt>
+      <label for="todo">Enter a new todo item:</label>
+    </dt>
+    <dd>
+      <input name="todo" id="todo" placeholder="Something to do" type="text"
+        value="<%= params[:todo] %>">
+    </dd>
+  </dl>
+  <fieldset class="actions">
+    <input type="submit" value="Add">
+  </fieldset>
+</form>
+
+<!-- display a link to the list of all Todo objs -->
+<!-- class="list" allows display of a list icon -->
+<% content_for :header_links do %>
+  <!-- <a href="/lists">All Lists</a> -->
+  <a class="list" href="/lists">All Lists</a>
+<% end %>

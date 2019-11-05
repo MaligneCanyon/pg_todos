@@ -1,0 +1,50 @@
+<section id="todos">
+  <header>
+    <h2>Editing "<%= @list[:name] %>"</h2>
+    <ul>
+      <li>
+        <!--
+          delete a list: this link works w/ a GET req, but it's safer to use
+          a form and button w/ a POST req
+          <a class="delete" href="/lists/%= params[:list_ndx] %/delete">Delete List</a>
+        -->
+        <!-- <form action="/lists/%= params[:list_ndx] %>/delete" method="post"> -->
+        <!-- <form action="/lists/%= @list_ndx %>/delete" method="post"> -->
+        <!-- <form class="delete" action="/lists/%= @list_ndx %>/delete" method="post"> -->
+        <!-- use a unique list id -->
+        <form class="delete" action="/lists/<%= @list_id %>/delete" method="post">
+          <button type="submit" class="delete">Delete List</button>
+        </form>
+      </li>
+    </ul>
+  </header>
+</section>
+
+<!-- edit the list name -->
+<!-- <form action="/lists/%= params[:list_ndx] %>" method="post"> -->
+<!-- <form action="/lists/%= @list_ndx %>" method="post"> -->
+<!-- use a unique list id -->
+<form action="/lists/<%= @list_id %>" method="post">
+  <dl>
+    <dt>
+      <label for="list_name">Enter a new name for the list:</label>
+    </dt>
+    <dd>
+      <!-- display either the entered name or the existing name -->
+      <input name="list_name" placeholder="List Name" type="text"
+        value="<%= params[:list_name] || @list[:name] %>">
+    </dd>
+  </dl>
+  <fieldset class="actions">
+    <input type="submit" value="Save">
+    <!-- <a href="/lists/%= params[:list_ndx] %>">Cancel</a> -->
+    <!-- <a href="/lists/%= @list_ndx %>">Cancel</a> -->
+    <!-- use a unique list id -->
+    <a href="/lists/<%= @list_id %>">Cancel</a>
+  </fieldset>
+</form>
+
+<!-- display a link to all lists (elsewhere on the page) -->
+<% content_for :header_links do %>
+  <a href="/lists">All Lists</a>
+<% end %>
