@@ -11,13 +11,13 @@ class DatabasePersistence # @storage is an instance of this class
     # @session[:lists] ||= []
   # end
   def initialize(logger)
-    @db = PG.connect(dbname: "todos") # create a connection to the db
-    # @db = if Sinatra::Base.production?
-    #         PG.connect(ENV['DATABASE_URL'])
-    #       else
-    #         PG.connect(dbname: "todos")
-    #       end
-    # @logger = logger # use the Sinatra logging routines
+    # @db = PG.connect(dbname: "todos") # create a connection to the db
+    @db = if Sinatra::Base.production?
+            PG.connect(ENV['DATABASE_URL'])
+          else
+            PG.connect(dbname: "todos")
+          end
+    @logger = logger # use the Sinatra logging routines
   end
 
   # log our query to the console and call exec_params, rtn'ing a PG::result obj
@@ -121,6 +121,10 @@ class DatabasePersistence # @storage is an instance of this class
 
     sql = "UPDATE todos SET complete = true WHERE list_id = $1;"
     query(sql, list_id)
+  end
+
+  def disconnect
+    @db.close
   end
 
   private

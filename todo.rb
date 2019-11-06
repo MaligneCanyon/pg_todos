@@ -133,6 +133,10 @@ before do
   # to here
 end
 
+after do
+  @storage.disconnect
+end
+
 not_found do
   redirect "/lists"
 end
